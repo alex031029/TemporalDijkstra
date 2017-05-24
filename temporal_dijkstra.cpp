@@ -2,11 +2,13 @@
 #include<string>
 #include<vector>
 #include<iostream>
+#include<math.h>
 #include"utility1.h"
 
 using namespace std;
 const int Total_Timestamp=1440;
 const int VectorDefaultSize = 20;
+const double epsilon = 1e-5;
 
 struct edge 
 {
@@ -44,7 +46,7 @@ struct edge
 		if(i==0||i==ft.size())
 		{
 			y1=ft[ft.size()-1].second;
-			x1=0;
+			x1=ft[ft.size()-1].first-1440;
 			i=0;
 		}
 		else
@@ -54,7 +56,15 @@ struct edge
 		}
 		y2=ft[i].second;
 		x2=ft[i].first;
-		int ret= (int)((y2-y1)/(x2-x1)*(t-x1)+y1);
+		int ret;
+		if(abs(x2-x1)<=epsilon)	
+		{
+			ret=(int)((y1+y2)/2);
+		}
+		else
+		{
+			ret= (int)((y2-y1)/(x2-x1)*(t-x1)+y1);
+		}
 		if(ret<0)
 		{
 			printf("u=%d,v=%d,time=%d,x1=%lf,y1=%lf,x2=%lf,y2=%lf,ret=%d\n",source,end,t,x1,y1,x2,y2,ret);
@@ -240,31 +250,35 @@ distance_label function_add(distance_label d, edge e)
 //addition of functions 
 	distance_label ret;
 	int i=0,j=0;
-	while(i<d.distance.size()&&j<e.ft.size())
+	while(i<d.distance.size()||j<e.ft.size())
 	{
 		int push_first,push_second;
 		if(d.distance[i].first==e.ft[j].first)
 		{
 			push_first=d.distance[i].first;
 			push_second=d.distance[i].second+e.ft[j].second;
+			//printf("case 1: push_first=%d,push_second=%d\n",push_first,push_second);
 			i++;
 			j++;
 		}
-		if(d.distance[i].first<e.ft[j].first)
+		else if(d.distance[i].first<e.ft[j].first)
 		{
 			push_first=d.distance[i].first;
 			push_second=d.distance[i].second+e.ft_value(push_first);
+			//printf("case 2: push_first=%d,push_second=%d\n",push_first,push_second);
 			i++;
 		}
-		if(d.distance[i].first>e.ft[j].first)
+		else if(d.distance[i].first>e.ft[j].first)
 		{
 			push_first=e.ft[j].first;
 			push_second=d.dis_value(push_first)+e.ft[j].second;
+			//printf("case 3: push_first=%d,push_second=%d\n",push_first,push_second);
 			j++;
 		}
+		//printf("push_first=%d,push_second=%d\n",push_first,push_second);
 		ret.distance.push_back(pair<int,int>(push_first,push_second));
 	}
-	if(i==d.distance.size())
+	if(i==d.distance.size()&&j<e.ft.size())
 	{
 		int push_first,push_second;
 		while(j<e.ft.size())
@@ -275,7 +289,7 @@ distance_label function_add(distance_label d, edge e)
 		}	
 		ret.distance.push_back(pair<int,int>(push_first,push_second));
 	}
-	else if(j==e.ft.size())
+	else if(j==e.ft.size()&&i<d.distance.size())
 	{
 		int push_first,push_second;
 		while(i<d.distance.size())
@@ -288,8 +302,13 @@ distance_label function_add(distance_label d, edge e)
 	}
 	ret.source=d.source;
 	ret.end=e.end;
-	printf("functions add suceed!\n");
+	printf("functions add suceed!\n d is \n");
+	d.print();
+	printf("e is \n");
+	e.print();
+	printf("The sum is \n");
 	ret.print();
+
 	return ret;
 
 }
