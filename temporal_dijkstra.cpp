@@ -4,6 +4,7 @@
 #include<iostream>
 #include<math.h>
 #include"utility1.h"
+#include"head.h"
 
 using namespace std;
 const int Total_Timestamp=1440;
@@ -252,10 +253,10 @@ distance_label function_add(distance_label d, edge e)
 	ret.source=d.source;
 	ret.end=e.end;
 	int i=0,j=0;
-	printf("functions add start\nd is \n");
-	d.print();
-	printf("e is \n");
-	e.print();
+	//printf("functions add start\nd is \n");
+	//d.print();
+	//printf("e is \n");
+	//e.print();
 	while(i<d.distance.size()||j<e.ft.size())
 	{
 		int push_first,push_second;
@@ -263,7 +264,7 @@ distance_label function_add(distance_label d, edge e)
 		{
 			push_first=d.distance[i].first;
 			push_second=d.distance[i].second+e.ft[j].second;
-			printf("case 1: push_first=%d,push_second=%d\n",push_first,push_second);
+			//printf("case 1: push_first=%d,push_second=%d\n",push_first,push_second);
 			i++;
 			j++;
 		}
@@ -271,29 +272,29 @@ distance_label function_add(distance_label d, edge e)
 		{
 			push_first=d.distance[i].first;
 			push_second=d.distance[i].second+e.ft_value(push_first);
-			printf("case 2: push_first=%d,push_second=%d\n",push_first,push_second);
+			//printf("case 2: push_first=%d,push_second=%d\n",push_first,push_second);
 			i++;
 		}
 		else if(d.distance[i].first>e.ft[j].first)
 		{
 			push_first=e.ft[j].first;
 			push_second=d.dis_value(push_first)+e.ft[j].second;
-			printf("case 3: push_first=%d,push_second=%d\n",push_first,push_second);
+			//printf("case 3: push_first=%d,push_second=%d\n",push_first,push_second);
 			j++;
 		}
-		printf("i=%d,push_first=%d,push_second=%d\n",i,push_first,push_second);
+		//printf("i=%d,push_first=%d,push_second=%d\n",i,push_first,push_second);
 		pair<int,int> push_item(push_first,push_second);
-		printf("push_item:%d,%d\n",push_item.first,push_item.second);
+		//printf("push_item:%d,%d\n",push_item.first,push_item.second);
 		//ret.distance.push_back(pair<int,int>(push_first,push_second));
-		printf("before pushed, ret=\n");
-		ret.print();
+		//printf("before pushed, ret=\n");
+		//ret.print();
 		ret.distance.push_back(push_item);
-		printf("after pushed, ret=\n");
-		ret.print();
+		//printf("after pushed, ret=\n");
+		//ret.print();
 	}
-	printf("intermidate ret is \n");
-	ret.print();
-	printf("i=%d\tj=\%d\n",i,j);
+	//printf("intermidate ret is \n");
+	//ret.print();
+	//printf("i=%d\tj=\%d\n",i,j);
 	if(i==d.distance.size()&&j<e.ft.size())
 	{
 		int push_first,push_second;
@@ -316,8 +317,8 @@ distance_label function_add(distance_label d, edge e)
 		}
 		ret.distance.push_back(pair<int,int>(push_first,push_second));
 	}
-	printf("Function add succeed!\nThe sum is \n");
-	ret.print();
+	//printf("Function add succeed!\nThe sum is \n");
+	//ret.print();
 
 	return ret;
 
@@ -338,8 +339,8 @@ edge function_composition(distance_label d, edge e)
 	}
 	ret.source=d.source;
 	ret.end=e.end;
-	printf("functions composition suceed!\n");
-	ret.print();
+	//printf("functions composition suceed!\n");
+	//ret.print();
 	return ret;
 }
 distance_label function_oplus(distance_label d, edge e) //oplus operation f(t) oplus g(t)=f(g(t)+t)+g(t)
@@ -396,8 +397,14 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 	pro_djk_map.insert(s,label_ss);
 	pro_djk_heap.initialize(n);
 	pro_djk_heap.insert(s,label_ss);
+	Timer * timer=new Timer(1);
+	long cnt=0;
 	while(!pro_djk_heap.empty())
 	{
+		if(cnt++%100000==0)
+		{
+			printf("cnt=%ld\n",cnt);
+		}
 		int v=pro_djk_heap.head();
 		//printf("poped v=%d,value=%d\n",v,djk_map[v]);
 		pro_djk_heap.pop();
@@ -405,14 +412,14 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 		distance_label temp_d = pro_djk_map[v];
 		//if(temp_d.distance.size()>2||out_edges[v].size()>10)
 		{
-			temp_d.print();
+			//temp_d.print();
 			//getchar();
 		}
 		for(int i=0;i<out_edges[v].size();i++)
 		{
 			edge e=out_edges[v][i];
-			printf("i=%d\n",i);
-			e.print();
+			//printf("i=%d\n",i);
+			//e.print();
 			//getchar();
 			/*
 			if(e.source==406181&&e.end==406180)
@@ -423,7 +430,7 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 			if(pro_djk_map.notexist(e.end))
 			{
 				//int time_u=pro_djk_map[v]+e.ft_dis(pro_djk_map[v]);
-				printf("new label insert start!\n");
+				//printf("new label insert start!\n");
 				//printf("u=%d,time_u=%d\n",e.end,time_u);
 				//djk_map.insert(e.end,time_u);
 				//djk_heap.insert(e.end,time_u);
@@ -432,12 +439,12 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 				//printf("oplus funciton g\n");
 				//pro_djk_map[v].print();
 				new_d=function_oplus(pro_djk_map[v],e);
-				printf("oplus suceed!\n");
+				//printf("oplus suceed!\n");
 				new_d.min_d_reset();
 				pro_djk_map.insert(e.end, new_d);
 				pro_djk_heap.insert(e.end,new_d);
-				printf("new label insert\n");
-				new_d.print();
+				//printf("new label insert\n");
+				//new_d.print();
 			}
 			else
 			{       /*
@@ -450,7 +457,7 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 					previous[e.end]=v;
 				}
 				*/
-				printf("label update start\n");
+				//printf("label update start\n");
 				distance_label new_d;
 				
 				new_d=function_oplus(pro_djk_map[v],e);
@@ -460,23 +467,22 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 					//pro_djk_map.erase(e.end);
 					pro_djk_map.insert(e.end, new_d);
 					pro_djk_heap.insert(e.end, new_d);
-					if(new_d.distance.size()>2)
+					//if(new_d.distance.size()>2)
 					{
-						printf("new label update\n");
-						new_d.print();
-						getchar();
+						//printf("new label update\n");
+						//new_d.print();
+						//getchar();
 					}
 				}
-				else
+				//else
 				{
-					printf("no need udpate\n");
-					;
+					//printf("no need udpate\n");
 				}
 			}
-			printf("!!!i=%d,size=%d\n",i,out_edges[i].size());	
+			//printf("!!!i=%d,size=%d\n",i,out_edges[i].size());	
 		}
 	}
-	
+	delete timer;
 }
 
 void temporal_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0, int time=0)
