@@ -401,10 +401,11 @@ void profile_dijkstra(iVector<iVector<edge> > out_edges, int previous[],int s=0,
 	long cnt=0;
 	while(!pro_djk_heap.empty())
 	{
-		if(cnt++%100000==0)
+		/*if(cnt++%100000==0)
 		{
 			printf("cnt=%ld\n",cnt);
 		}
+		*/
 		int v=pro_djk_heap.head();
 		//printf("poped v=%d,value=%d\n",v,djk_map[v]);
 		pro_djk_heap.pop();
@@ -584,8 +585,13 @@ int main()
 	}
 	fclose(fin);
 	//temporal_dijkstra(out_edges,previous,0,0);
+	clock_t start_time,end_time;
+	start_time=clock();	
 	profile_dijkstra(out_edges,previous,0,0);
-
+	end_time=clock();
+	double totol_time=(double)(end_time-start_time)/CLOCKS_PER_SEC;
+	double time_per_node=totol_time*1000/N;
+	//printf("Total Time of process is %0.2lf s,time_per_node is %0.2lf ms\n",totol_time,time_per_node);
 	//map_print(djk_map);
 	//edge_set_print(out_edges);
 	//edge_set_print(in_edges);

@@ -6,7 +6,7 @@
 #include<cmath>
 #include"utility1.h"
 #include"RTree.h"
-
+#include"time.h"
 #define Pi 3.14159265359
 #define EARTH_RADIUS 63781370
 
@@ -570,7 +570,10 @@ int main()
 	//node_set[0].print();
 	//taxi_set[0].print();
 	//taxi_set[taxi_set.size()-1].print();
+	clock_t start_time, end_time;
+	start_time=clock();
 	taxi_road_mapping();
+	end_time=clock();
 	//edge_speed_info_print();
 	//edge_set[298444].print();
 	//double s1=distance(40.479589,117.362083,40.481161,117.362751);
@@ -588,5 +591,6 @@ int main()
 	temporal_graph_print(60);
 	double FIFO_per=FIFO_percentage();
 	printf("FIFO_percentage=%lf\n",FIFO_per);
+	printf("Time to generate Beijing Road is %0.2lf\n",(double)(end_time-start_time)/CLOCKS_PER_SEC);
 	return 0;
 }
